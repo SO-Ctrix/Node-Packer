@@ -148,6 +148,9 @@ export default function EditPackageJson({ params }: { params: Promise<{ id: stri
 
     try {
       setIsSaving(true);
+
+      console.log('Sending data:', packageData); // Log des données envoyées
+
       const response = await fetch(`/api/${resolvedParams.id}`, {
         method: 'PATCH',
         headers: {

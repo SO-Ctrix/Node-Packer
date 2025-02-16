@@ -1,0 +1,27 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model PackageJson {
+  id           Int      @id @default(autoincrement())
+  name         String
+  description  String?
+  isPrivate    Boolean  @default(false)
+  version      String
+  keywords     String   // Stored as JSON string
+  dependencies String   // Stored as JSON string
+  author       String?
+  license      String
+  main         String
+  type         String?
+  categories   String?  // Stored as JSON string
+  scripts      String?  // Stored as JSON string
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  packages     String   // Stored as JSON string
+}

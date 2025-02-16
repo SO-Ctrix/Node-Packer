@@ -65,7 +65,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+    <div className="bg-gradient-to-b from-gray-50 to-gray-100">
       <div className="container mx-auto p-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">

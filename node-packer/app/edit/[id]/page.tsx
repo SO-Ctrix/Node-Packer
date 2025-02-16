@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { PackageJson } from 'type-fest';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,7 +16,8 @@ import { X, Save, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
 import { ExtendedPackageJson } from '@/types/package';
 
-export default function EditPackageJson({ params }: { params: { id: string } }) {
+export default function EditPackageJson({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = use(params);
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -28,11 +29,11 @@ export default function EditPackageJson({ params }: { params: { id: string } }) 
 
   useEffect(() => {
     fetchPackageData();
-  }, [params.id]);
+  }, [resolvedParams.id]);
 
   const fetchPackageData = async () => {
     try {
-      const response = await fetch(`/api/${params.id}`);
+      const response = await fetch(`/api/${resolvedParams.id}`);
       if (!response.ok) throw new Error('Package not found');
       
       const data = await response.json();
@@ -147,7 +148,7 @@ export default function EditPackageJson({ params }: { params: { id: string } }) 
 
     try {
       setIsSaving(true);
-      const response = await fetch(`/api/${params.id}`, {
+      const response = await fetch(`/api/${resolvedParams.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

@@ -8,20 +8,32 @@ export async function GET(request: Request) {
         const search = searchParams.get("search") || "";
         const category = searchParams.get("category") || "";
 
+        // console.log('Received parameters:', { search, category }); // Debug log
+
         try {
             const packages = await prisma.packageJson.findMany({
                 where: {
-                    OR: [
+                    AND: [
                         {
-                            name: {
-                                contains: search,
-                            },
+                            OR: [
+                                {
+                                    name: {
+                                        contains: search,
+                                    },
+                                },
+                                {
+                                    description: {
+                                        contains: search,
+                                    },
+                                },
+                            ],
                         },
-                        {
-                            description: {
-                                contains: search,
+                        // Add category filter
+                        category ? {
+                            categories: {
+                                contains: category, // Note: This might need adjustment based on how categories are stored
                             },
-                        },
+                        } : {},
                     ],
                 },
                 orderBy: {
@@ -41,6 +53,8 @@ export async function GET(request: Request) {
                     packages: true,
                 },
             });
+
+            // console.log('Found packages count:', packages.length); // Debug log
 
             // Conversion des chaînes JSON en objets
             const formattedPackages = packages.map((pkg) => ({
